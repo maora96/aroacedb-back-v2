@@ -9,6 +9,7 @@ export enum SexualOrientation {
   Queer = 'QUEER',
   Allosexual = 'ALLOSEXUAL',
   Acespec = 'ACESPEC',
+  Unknown = 'UNKNOWN',
 }
 
 export enum RomanticOrientation {
@@ -24,6 +25,7 @@ export enum RomanticOrientation {
   Arospec = 'AROSPEC',
   Wtfromantic = 'WTFROMANTIC',
   Queer = 'QUEER',
+  Unknown = 'UNKNOWN',
 }
 
 export enum Gender {
