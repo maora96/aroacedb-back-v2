@@ -45,13 +45,8 @@ export class CreateCharacterDTO {
   @IsNotEmpty({ message: "Importance can't be empty" })
   importance: Importance;
 
-  @IsEnum(Pairing, {
-    message: 'Pairing invalid.',
-  })
-  @IsNotEmpty({ message: "Pairing can't be empty" })
   pairing: Pairing | null;
 
-  @IsNotEmpty({ message: "Relationships can't be empty" })
   relationships: Relationship[] | null;
 
   notesAndWarnings: string | null;
