@@ -84,7 +84,7 @@ export class Character {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt!: Date;
 
-  @ManyToMany(() => Character)
+  @ManyToMany(() => Story)
   @JoinColumn()
   @JoinTable()
   stories: Story[] | null;
