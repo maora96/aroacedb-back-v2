@@ -143,7 +143,7 @@ export class CharactersService {
         .orWhereILike('series', `%${queries.search}%`);
 
       if (isGenre(queries.search)) {
-        totalQuery.andWhereRaw('? =ANY(genres)', queries.search);
+        totalQuery.orWhereRaw('? =ANY(genres)', queries.search);
       }
       if (isRelationship(queries.search)) {
         totalQuery.orWhereRaw('? =ANY(relationships)', queries.search);
@@ -184,7 +184,7 @@ export class CharactersService {
     const result = await query;
     const [total] = await totalQuery;
 
-    return { result, total: total?.count ? Number(total?.count) : 0 };
+    return { result, total: total?.count };
   }
 
   getRandom() {

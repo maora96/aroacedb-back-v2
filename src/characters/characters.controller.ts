@@ -31,8 +31,9 @@ export class CharactersController {
   }
 
   @Get('random')
-  getRandom() {
-    return this.charactersService.getRandom();
+  async getRandom() {
+    const content = await this.charactersService.getRandom();
+    return { result: content };
   }
 
   @Get(':id')
@@ -50,7 +51,7 @@ export class CharactersController {
   async create(@Body() body: CreateCharacterDTO) {
     const content = await this.charactersService.create(body);
 
-    return content;
+    return { result: content };
   }
 
   @Patch(':id')

@@ -1,10 +1,8 @@
 import { Story } from 'src/stories/story.entity';
 import {
-  AgeGroup,
   Gender,
   Genres,
   Importance,
-  Length,
   Pairing,
   Relationship,
   RomanticOrientation,
@@ -23,7 +21,6 @@ import {
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { EditCharacterDTO } from './dtos/edit-character.dto';
-//   import { EditCharacterDTO } from './dtos/edit-book.dto';
 
 @Entity({ name: 'characters' })
 export class Character {
@@ -89,8 +86,6 @@ export class Character {
     series: string | null,
     genres: Genres[],
     cover: string | null,
-    // ageGroup: AgeGroup,
-    // length: Length,
     typeOfRep: TypeOfRep,
     importance: Importance,
     pairing: Pairing | null,
@@ -109,8 +104,6 @@ export class Character {
     this.series = series ?? null;
     this.genres = genres;
     this.cover = cover;
-    // this.ageGroup = ageGroup;
-    // this.length = length;
     this.typeOfRep = typeOfRep;
     this.importance = importance;
     this.pairing = pairing ?? null;
@@ -129,8 +122,6 @@ export class Character {
     this.series = editCharacterDTO.series ?? this.series;
     this.genres = editCharacterDTO.genres ?? this.genres;
     this.cover = editCharacterDTO.cover ?? this.cover;
-    // this.ageGroup = editCharacterDTO.ageGroup ?? this.ageGroup;
-    // this.length = editCharacterDTO.length ?? this.length;
     this.typeOfRep = editCharacterDTO.typeOfRep ?? this.typeOfRep;
     this.importance = editCharacterDTO.importance ?? this.importance;
     this.pairing = editCharacterDTO.pairing ?? this.pairing;
