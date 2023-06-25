@@ -34,16 +34,6 @@ export class CharactersService {
     const query = knex('characters').select('*');
     const totalQuery = knex('characters').count();
 
-    if (filters.ageGroup) {
-      query.andWhere('ageGroup', '=', filters.ageGroup);
-      totalQuery.andWhere('ageGroup', '=', filters.ageGroup);
-    }
-
-    if (filters.length) {
-      query.andWhere('length', '=', filters.length);
-      totalQuery.andWhere('length', '=', filters.length);
-    }
-
     if (filters.typeOfRep) {
       query.andWhere('typeOfRep', '=', filters.typeOfRep);
       totalQuery.andWhere('typeOfRep', '=', filters.typeOfRep);
@@ -82,7 +72,6 @@ export class CharactersService {
     }
 
     query.limit(limit).offset(offset);
-    totalQuery.limit(limit).offset(offset);
 
     const result = await query;
     const [total] = await totalQuery;
@@ -179,12 +168,11 @@ export class CharactersService {
     }
 
     query.limit(limit).offset(offset);
-    totalQuery.limit(limit).offset(offset);
 
     const result = await query;
     const [total] = await totalQuery;
 
-    return { result, total: total?.count };
+    return { result, total: total?.count ? Number(total?.count) : 0 };
   }
 
   getRandom() {

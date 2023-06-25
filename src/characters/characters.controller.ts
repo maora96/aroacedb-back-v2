@@ -27,6 +27,7 @@ export class CharactersController {
 
   @Get()
   getMany(@Query() queries: CharacterSearchFilters) {
+    console.log('queries', queries);
     return this.charactersService.getMany(queries);
   }
 
