@@ -6,11 +6,9 @@ import {
   IsString,
 } from 'class-validator';
 import {
-  AgeGroup,
   Gender,
   Genres,
   Importance,
-  Length,
   Pairing,
   Relationship,
   RomanticOrientation,
@@ -35,18 +33,6 @@ export class CreateCharacterDTO {
 
   cover: string | null;
 
-  // @IsEnum(AgeGroup, {
-  //   message: 'AgeGroup invalid.',
-  // })
-  // @IsNotEmpty({ message: "AgeGroup can't be empty" })
-  // ageGroup: AgeGroup;
-
-  // @IsEnum(Length, {
-  //   message: 'Length invalid.',
-  // })
-  // @IsNotEmpty({ message: "Length can't be empty" })
-  // length: Length;
-
   @IsEnum(TypeOfRep, {
     message: 'TypeOfRep invalid.',
   })
@@ -65,7 +51,6 @@ export class CreateCharacterDTO {
   @IsNotEmpty({ message: "Pairing can't be empty" })
   pairing: Pairing | null;
 
-  @IsArray()
   @IsNotEmpty({ message: "Relationships can't be empty" })
   relationships: Relationship[] | null;
 
