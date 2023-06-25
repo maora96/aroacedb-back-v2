@@ -42,11 +42,14 @@ export class Character {
   @Column({ type: 'text', array: true })
   genres: Genres[];
 
-  @Column({ type: 'enum', enum: AgeGroup })
-  ageGroup: AgeGroup;
+  @Column({ type: 'text', nullable: true })
+  cover: string | null;
 
-  @Column({ type: 'enum', enum: Length })
-  length: Length;
+  // @Column({ type: 'enum', enum: AgeGroup })
+  // ageGroup: AgeGroup;
+
+  // @Column({ type: 'enum', enum: Length })
+  // length: Length;
 
   @Column({ type: 'enum', enum: TypeOfRep })
   typeOfRep: TypeOfRep;
@@ -91,8 +94,9 @@ export class Character {
     author: string,
     series: string | null,
     genres: Genres[],
-    ageGroup: AgeGroup,
-    length: Length,
+    cover: string | null,
+    // ageGroup: AgeGroup,
+    // length: Length,
     typeOfRep: TypeOfRep,
     importance: Importance,
     pairing: Pairing | null,
@@ -102,16 +106,17 @@ export class Character {
     gender: Gender,
     notesAndWarnings: string | null,
     approved: boolean,
-    id?: string,
     createdAt?: Date | null,
+    id?: string,
   ) {
     this.id = id ?? uuid();
     this.name = name;
     this.author = author;
     this.series = series ?? null;
     this.genres = genres;
-    this.ageGroup = ageGroup;
-    this.length = length;
+    this.cover = cover;
+    // this.ageGroup = ageGroup;
+    // this.length = length;
     this.typeOfRep = typeOfRep;
     this.importance = importance;
     this.pairing = pairing ?? null;
@@ -129,8 +134,9 @@ export class Character {
     this.author = editCharacterDTO.author ?? this.author;
     this.series = editCharacterDTO.series ?? this.series;
     this.genres = editCharacterDTO.genres ?? this.genres;
-    this.ageGroup = editCharacterDTO.ageGroup ?? this.ageGroup;
-    this.length = editCharacterDTO.length ?? this.length;
+    this.cover = editCharacterDTO.cover ?? this.cover;
+    // this.ageGroup = editCharacterDTO.ageGroup ?? this.ageGroup;
+    // this.length = editCharacterDTO.length ?? this.length;
     this.typeOfRep = editCharacterDTO.typeOfRep ?? this.typeOfRep;
     this.importance = editCharacterDTO.importance ?? this.importance;
     this.pairing = editCharacterDTO.pairing ?? this.pairing;

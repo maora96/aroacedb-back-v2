@@ -33,17 +33,19 @@ export class CreateCharacterDTO {
   @IsNotEmpty({ message: "Genre can't be empty" })
   genres: Genres[];
 
-  @IsEnum(AgeGroup, {
-    message: 'AgeGroup invalid.',
-  })
-  @IsNotEmpty({ message: "AgeGroup can't be empty" })
-  ageGroup: AgeGroup;
+  cover: string | null;
 
-  @IsEnum(Length, {
-    message: 'Length invalid.',
-  })
-  @IsNotEmpty({ message: "Length can't be empty" })
-  length: Length;
+  // @IsEnum(AgeGroup, {
+  //   message: 'AgeGroup invalid.',
+  // })
+  // @IsNotEmpty({ message: "AgeGroup can't be empty" })
+  // ageGroup: AgeGroup;
+
+  // @IsEnum(Length, {
+  //   message: 'Length invalid.',
+  // })
+  // @IsNotEmpty({ message: "Length can't be empty" })
+  // length: Length;
 
   @IsEnum(TypeOfRep, {
     message: 'TypeOfRep invalid.',

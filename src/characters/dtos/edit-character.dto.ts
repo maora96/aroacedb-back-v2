@@ -35,17 +35,20 @@ export class EditCharacterDTO {
   @IsOptional()
   genres: Genres[];
 
-  @IsEnum(AgeGroup, {
-    message: 'AgeGroup invalid.',
-  })
   @IsOptional()
-  ageGroup: AgeGroup;
+  cover: string | null;
 
-  @IsEnum(Length, {
-    message: 'Length invalid.',
-  })
-  @IsOptional()
-  length: Length;
+  // @IsEnum(AgeGroup, {
+  //   message: 'AgeGroup invalid.',
+  // })
+  // @IsOptional()
+  // ageGroup: AgeGroup;
+
+  // @IsEnum(Length, {
+  //   message: 'Length invalid.',
+  // })
+  // @IsOptional()
+  // length: Length;
 
   @IsEnum(TypeOfRep, {
     message: 'TypeOfRep invalid.',
