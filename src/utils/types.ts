@@ -23,6 +23,7 @@ export enum RomanticOrientation {
   Alloromantic = 'ALLOROMANTIC',
   Arospec = 'AROSPEC',
   Wtfromantic = 'WTFROMANTIC',
+  Queer = 'QUEER',
 }
 
 export enum Gender {
@@ -35,9 +36,9 @@ export enum Genres {
   Fantasy = 'FANTASY',
   Science_Fiction = 'SCIENCE_FICTION',
   Romance = 'ROMANCE',
-  Historical_Fiction = 'HISTORICAL FICTION',
+  Historical_Fiction = 'HISTORICAL_FICTION',
   Contemporary = 'CONTEMPORARY',
-  Urban_Fantasy = 'URBAN FANTASY',
+  Urban_Fantasy = 'URBAN_FANTASY',
   Post_Apocalyptic = 'POST_APOCALYPTIC',
   Solarpunk = 'SOLARPUNK',
   High_Fantasy = 'HIGH_FANTASY',
@@ -50,6 +51,22 @@ export enum Genres {
   Paranormal = 'PARANORMAL',
   Superhero = 'SUPERHERO',
   Horror = 'HORROR',
+  Paranormal_Romance = 'PARANORMAL_ROMANCE',
+  Dieselpunk = 'DIESELPUNK',
+  Steampunk = 'STEAMPUNK',
+  Science_Fantasy = 'SCIENCE_FANTASY',
+  Dystopia = 'DYSTOPIA',
+  Historical_Fantasy = 'HISTORICAL_FANTASY',
+  Contemporary_Romance = 'CONTEMPORARY_ROMANCE',
+  Romantic_Comedy = 'ROMANTIC_COMEDY',
+  Adventure = 'ADVENTURE',
+  Fairytale = 'FAIRYTALE',
+  Humor = 'HUMOR',
+  Historical_Romance = 'HISTORICAL_ROMANCE',
+  Literary_Fiction = 'LITERARY_FICTION',
+  Portal_Fantasy = 'PORTAL_FANTASY',
+  Action = 'ACTION',
+  Drama = 'DRAMA',
 }
 
 export enum AgeGroup {
@@ -65,6 +82,15 @@ export enum Relationship {
   Romance = 'ROMANCE',
   Queerplatonic = 'QUEERPLATONIC',
   Family = 'FAMILY',
+  Found_Family = 'FOUND_FAMILY',
+  Found_Children = 'FOUND_CHILDREN',
+  Partners = 'PARTNERS',
+  Colleagues = 'COLLEAGUES',
+  Mentorship = 'MENTORSHIP',
+  Team = 'TEAM',
+  Siblings = 'SIBLINGS',
+  Community = 'COMMUNITY',
+  Rival = 'RIVAL',
 }
 
 export enum Length {
@@ -105,4 +131,9 @@ export enum Pairing {
   F_NB_F = 'F/NB/F',
   NB_NB_F = 'NB/NB/F',
   NB_NB_M = 'NB/NB/M',
+  M_M_NB_NB = 'M/M/NB/NB',
+  M_M_M_M = 'M/M/M/M',
+  M_M_F_F = 'M/M/F/F',
+  M_M_F_NB = 'M/M/F/NB',
+  M_M_M_NB = 'M/M/M/NB',
 }

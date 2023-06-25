@@ -45,12 +45,6 @@ export class Character {
   @Column({ type: 'text', nullable: true })
   cover: string | null;
 
-  // @Column({ type: 'enum', enum: AgeGroup })
-  // ageGroup: AgeGroup;
-
-  // @Column({ type: 'enum', enum: Length })
-  // length: Length;
-
   @Column({ type: 'enum', enum: TypeOfRep })
   typeOfRep: TypeOfRep;
 
