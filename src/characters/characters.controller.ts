@@ -38,13 +38,17 @@ export class CharactersController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string) {
-    return this.charactersService.getOne(id);
+  async getOne(@Param('id') id: string) {
+    const content = await this.charactersService.getOne(id);
+    return { result: content };
   }
 
   @Post('favorites')
-  getFavorites(@Body() body: GetFavoritesDTO) {
-    return this.charactersService.getFavorites(body.favorites);
+  async getFavorites(@Body() body: GetFavoritesDTO) {
+    const content = await this.charactersService.getFavorites(body.favorites);
+    return {
+      favorites: content,
+    };
   }
 
   @Post()
