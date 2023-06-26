@@ -12,9 +12,10 @@ import {
 } from '@nestjs/common';
 import { CreateCharacterDTO } from './dtos/create-character.dto';
 import { CharactersService } from './characters.service';
-import { CharacterFilters, CharacterSearchFilters } from 'src/utils/filters';
+import { CharacterFilters, SearchFilters } from 'src/utils/filters';
 import { GetFavoritesDTO } from './dtos/get-favorites.dto';
 import { EditCharacterDTO } from './dtos/edit-character.dto';
+import { EditStoriesDTO } from './dtos/edit-stories.dto';
 
 @Controller('characters')
 export class CharactersController {
@@ -26,8 +27,7 @@ export class CharactersController {
   }
 
   @Get()
-  getMany(@Query() queries: CharacterSearchFilters) {
-    console.log('queries', queries);
+  getMany(@Query() queries: SearchFilters) {
     return this.charactersService.getMany(queries);
   }
 
@@ -58,6 +58,14 @@ export class CharactersController {
   @Patch(':id')
   async edit(@Param('id') id: string, @Body() body: EditCharacterDTO) {
     const content = await this.charactersService.edit(id, body);
+
+    return content;
+  }
+
+  @Patch('/stories/:id')
+  async editCharacters(@Param('id') id: string, @Body() body: EditStoriesDTO) {
+    const { storiesIds } = body;
+    const content = await this.charactersService.editStories(id, storiesIds);
 
     return content;
   }

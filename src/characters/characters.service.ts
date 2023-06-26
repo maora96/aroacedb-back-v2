@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Character } from './character.entity';
 import { In, Repository } from 'typeorm';
 import { CreateCharacterDTO } from './dtos/create-character.dto';
-import { CharacterFilters, CharacterSearchFilters } from 'src/utils/filters';
+import { CharacterFilters, SearchFilters } from 'src/utils/filters';
 import { getLimitAndOffset } from 'src/utils/pagination.';
 import { EditCharacterDTO } from './dtos/edit-character.dto';
 import {
@@ -20,12 +20,15 @@ import {
   isTypeOfRep,
 } from 'src/utils/enumValidation';
 import { knex } from 'src/utils/knex';
+import { Story } from 'src/stories/story.entity';
 
 @Injectable()
 export class CharactersService {
   constructor(
     @InjectRepository(Character)
     private charactersRepository: Repository<Character>,
+    @InjectRepository(Story)
+    private storiesRepository: Repository<Story>,
   ) {}
 
   async getManyAdvanced(filters: CharacterFilters) {
@@ -51,6 +54,11 @@ export class CharactersService {
     if (filters.relationships) {
       query.andWhereRaw('? =ANY(relationships)', filters.relationships);
       totalQuery.andWhereRaw('? =ANY(relationships)', filters.relationships);
+    }
+
+    if (filters.genres) {
+      query.andWhereRaw('? =ANY(genres)', filters.genres);
+      totalQuery.andWhereRaw('? =ANY(genres)', filters.genres);
     }
 
     if (filters.sexualOrientation) {
@@ -79,7 +87,7 @@ export class CharactersService {
     return { result, total: total?.count ? Number(total?.count) : 0 };
   }
 
-  async getMany(queries: CharacterSearchFilters) {
+  async getMany(queries: SearchFilters) {
     const { limit, offset } = getLimitAndOffset(queries.amount, queries.page);
 
     const query = knex('characters').select('*');
@@ -97,12 +105,7 @@ export class CharactersService {
       if (isRelationship(queries.search)) {
         query.orWhereRaw('? =ANY(relationships)', queries.search);
       }
-      if (isAgeGroup(queries.search)) {
-        query.orWhere('ageGroup', '=', queries.search);
-      }
-      if (isLength(queries.search)) {
-        query.orWhere('length', '=', queries.search);
-      }
+
       if (isTypeOfRep(queries.search)) {
         query.orWhere('typeOfRep', '=', queries.search);
       }
@@ -254,5 +257,31 @@ export class CharactersService {
       throw new NotFoundException('Character not found');
     }
     return this.charactersRepository.remove(character);
+  }
+
+  async editStories(id: string, storiesIds: string[]) {
+    const character = await this.charactersRepository.findOne({
+      where: { id },
+      relations: ['stories'],
+    });
+
+    if (!character) {
+      throw new NotFoundException('Character not found');
+    }
+
+    const stories = await this.storiesRepository.find({
+      where: { id: In(storiesIds) },
+    });
+
+    if (!stories) {
+      throw new NotFoundException('No stories found.');
+    }
+
+    character.addStory(stories);
+    await this.charactersRepository.save(character);
+
+    return {
+      character,
+    };
   }
 }

@@ -134,4 +134,26 @@ export class Character {
     this.notesAndWarnings =
       editCharacterDTO.notesAndWarnings ?? this.notesAndWarnings;
   }
+
+  // addStory(story: Story) {
+  //   if (!this.stories) {
+  //     this.stories = [];
+  //     this.stories.push(story);
+  //   } else {
+  //     this.stories.push(story);
+  //   }
+  // }
+
+  addStory(stories: Story[]) {
+    if (this.stories.length === 0) {
+      this.stories = stories;
+    } else {
+      const existingStoriesIds = this.stories.map((story: Story) => story.id);
+      for (const story of stories) {
+        if (!existingStoriesIds.includes(story.id)) {
+          this.stories.push(story);
+        }
+      }
+    }
+  }
 }

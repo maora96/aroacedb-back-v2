@@ -69,6 +69,10 @@ export enum Genres {
   Portal_Fantasy = 'PORTAL_FANTASY',
   Action = 'ACTION',
   Drama = 'DRAMA',
+  Cuil = 'CUIL',
+  Fantasy_Romance = 'FANTASY_ROMANCE',
+  Detective = 'DETECTIVE',
+  Crime = 'CRIME',
 }
 
 export enum AgeGroup {

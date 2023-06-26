@@ -18,8 +18,6 @@ export interface PaginationParams {
 
 export interface CharacterFilters extends PaginationParams {
   genres?: Genres;
-  ageGroup?: AgeGroup;
-  length?: Length;
   typeOfRep?: TypeOfRep;
   importance?: Importance;
   pairing?: Pairing;
@@ -29,6 +27,12 @@ export interface CharacterFilters extends PaginationParams {
   gender?: Gender;
 }
 
-export interface CharacterSearchFilters extends PaginationParams {
+export interface StoriesFilters extends PaginationParams {
+  genres?: Genres;
+  ageGroup?: AgeGroup;
+  length?: Length;
+}
+
+export interface SearchFilters extends PaginationParams {
   search?: string;
 }

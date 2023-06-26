@@ -4,11 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Character } from './characters/character.entity';
 import { ConfigModule } from '@nestjs/config';
 import { Story } from './stories/story.entity';
+import { StoriesModule } from './stories/stories.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     CharactersModule,
+    StoriesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       entities: [Character, Story],
@@ -23,6 +25,11 @@ import { Story } from './stories/story.entity';
         rejectUnauthorized: false,
         ca: process.env.CACERT,
       },
+      // username: 'postgres',
+      // password: 'postgres',
+      // host: 'localhost',
+      // database: 'aroacedb',
+      // port: 5432,
     }),
   ],
   controllers: [],
