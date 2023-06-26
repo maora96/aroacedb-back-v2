@@ -1,5 +1,5 @@
 export enum SexualOrientation {
-  Aexual = 'ASEXUAL',
+  Asexual = 'ASEXUAL',
   Grayasexual = 'GRAYASEXUAL',
   Demisexual = 'DEMISEXUAL',
   Bisexual = 'BISEXUAL',
