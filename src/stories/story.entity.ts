@@ -32,7 +32,7 @@ export class Story {
   series: string | null;
 
   @Column({
-    type: 'integer',
+    type: 'numeric',
     nullable: true,
   })
   volume: number | null;
