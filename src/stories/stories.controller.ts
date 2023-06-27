@@ -61,11 +61,18 @@ export class StoriesController {
     return { result: content };
   }
 
+  @Patch('status/:id')
+  async approve(@Param('id') id: string) {
+    const content = await this.storiesService.approve(id);
+
+    return { result: content };
+  }
+
   @Patch(':id')
   async edit(@Param('id') id: string, @Body() body: EditStoryDTO) {
     const content = await this.storiesService.edit(id, body);
 
-    return content;
+    return { result: content };
   }
 
   @Patch('/characters/:id')
@@ -76,11 +83,13 @@ export class StoriesController {
     const { charactersIds } = body;
     const content = await this.storiesService.editCharacters(id, charactersIds);
 
-    return content;
+    return { result: content };
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.storiesService.delete(id);
+  async delete(@Param('id') id: string) {
+    const content = await this.storiesService.delete(id);
+
+    return { result: content };
   }
 }

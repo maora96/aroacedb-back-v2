@@ -19,7 +19,7 @@ import { Story } from 'src/stories/story.entity';
 export class CharactersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthenticationMiddleware).forRoutes({
-      path: '/characters/status/:id',
+      path: '/characters/statuss/:id',
       method: RequestMethod.PATCH,
     });
   }

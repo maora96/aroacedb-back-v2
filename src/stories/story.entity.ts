@@ -139,4 +139,8 @@ export class Story {
     this.notesAndWarnings =
       editStoryDTO.notesAndWarnings ?? this.notesAndWarnings;
   }
+
+  approve() {
+    this.approved = true;
+  }
 }

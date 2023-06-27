@@ -27,12 +27,12 @@ export class StoriesService {
   async getManyAdvanced(filters: StoriesFilters) {
     const { limit, offset } = getLimitAndOffset(filters.amount, filters.page);
 
-    const query = knex('stories').select('*');
-    const totalQuery = knex('stories').count();
+    const query = knex('stories').select('*').where('approved', true);
+    const totalQuery = knex('stories').where('approved', true).count();
 
     if (filters.ageGroup) {
       query.andWhere('ageGroup', '=', filters.ageGroup);
-      totalQuery.andWhere('imporageGrouptance', '=', filters.ageGroup);
+      totalQuery.andWhere('ageGroup', '=', filters.ageGroup);
     }
 
     if (filters.length) {
@@ -56,45 +56,43 @@ export class StoriesService {
   async getMany(queries: SearchFilters) {
     const { limit, offset } = getLimitAndOffset(queries.amount, queries.page);
 
-    const query = knex('stories').select('*');
-    const totalQuery = knex('stories').count();
+    const query = knex('stories').select('*').where('approved', true);
+    const totalQuery = knex('stories').where('approved', true).count();
 
     if (queries.search) {
-      query
-        .whereILike('title', `%${queries.search}%`)
-        .orWhereILike('author', `%${queries.search}%`)
-        .orWhereILike('series', `%${queries.search}%`);
+      query.andWhere((qb) => {
+        qb.whereILike('title', `%${queries.search}%`)
+          .orWhereILike('author', `%${queries.search}%`)
+          .orWhereILike('series', `%${queries.search}%`);
 
-      if (isGenre(queries.search)) {
-        query.orWhereRaw('? =ANY(genres)', queries.search);
-      }
+        if (isGenre(queries.search)) {
+          qb.orWhereRaw('? =ANY(genres)', queries.search);
+        }
 
-      if (isAgeGroup(queries.search)) {
-        query.orWhere('ageGroup', '=', queries.search);
-      }
-      if (isLength(queries.search)) {
-        query.orWhere('length', '=', queries.search);
-      }
+        if (isAgeGroup(queries.search)) {
+          qb.orWhere('ageGroup', '=', queries.search);
+        }
+        if (isLength(queries.search)) {
+          qb.orWhere('length', '=', queries.search);
+        }
+      });
 
-      totalQuery
-        .whereILike('title', `%${queries.search}%`)
-        .orWhereILike('author', `%${queries.search}%`)
-        .orWhereILike('series', `%${queries.search}%`);
+      totalQuery.andWhere((qb) => {
+        qb.whereILike('title', `%${queries.search}%`)
+          .orWhereILike('author', `%${queries.search}%`)
+          .orWhereILike('series', `%${queries.search}%`);
 
-      if (isGenre(queries.search)) {
-        totalQuery.orWhereRaw('? =ANY(genres)', queries.search);
-      }
+        if (isGenre(queries.search)) {
+          qb.orWhereRaw('? =ANY(genres)', queries.search);
+        }
 
-      if (isAgeGroup(queries.search)) {
-        totalQuery.orWhere('ageGroup', '=', queries.search);
-      }
-
-      if (isLength(queries.search)) {
-        totalQuery.orWhere('length', '=', queries.search);
-      }
-      if (isTypeOfRep(queries.search)) {
-        totalQuery.orWhere('typeOfRep', '=', queries.search);
-      }
+        if (isAgeGroup(queries.search)) {
+          qb.orWhere('ageGroup', '=', queries.search);
+        }
+        if (isLength(queries.search)) {
+          qb.orWhere('length', '=', queries.search);
+        }
+      });
     }
 
     query.limit(limit).offset(offset);
@@ -109,15 +107,21 @@ export class StoriesService {
     return this.storiesRepository
       .createQueryBuilder('stories')
       .select()
+      .where('characters.approved = :status', { status: true })
       .orderBy('RANDOM()')
       .getOne();
   }
 
-  getOne(id: string) {
-    return this.storiesRepository.findOne({
+  async getOne(id: string) {
+    const story = await this.storiesRepository.findOne({
       where: { id },
       relations: ['characters'],
     });
+
+    if (!story) {
+      throw new NotFoundException('Story not found');
+    }
+    return story;
   }
 
   getFavorites(favorites: string[]) {
@@ -218,5 +222,21 @@ export class StoriesService {
     });
 
     return stories;
+  }
+
+  async approve(id: string) {
+    const story = await this.storiesRepository.findOne({ where: { id } });
+
+    if (!story) {
+      throw new NotFoundException('Story not found');
+    }
+
+    story.approve();
+
+    await this.storiesRepository.save(story);
+
+    return {
+      story,
+    };
   }
 }

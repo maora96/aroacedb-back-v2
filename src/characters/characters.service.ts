@@ -34,8 +34,8 @@ export class CharactersService {
   async getManyAdvanced(filters: CharacterFilters) {
     const { limit, offset } = getLimitAndOffset(filters.amount, filters.page);
 
-    const query = knex('characters').select('*');
-    const totalQuery = knex('characters').count();
+    const query = knex('characters').select('*').where('approved', true);
+    const totalQuery = knex('characters').where('approved', true).count();
 
     if (filters.typeOfRep) {
       query.andWhere('typeOfRep', '=', filters.typeOfRep);
@@ -65,6 +65,7 @@ export class CharactersService {
       query.andWhere('sexualOrientation', '=', filters.sexualOrientation);
       totalQuery.andWhere('sexualOrientation', '=', filters.sexualOrientation);
     }
+
     if (filters.romanticOrientation) {
       query.andWhere('romanticOrientation', '=', filters.romanticOrientation);
       totalQuery.andWhere(
@@ -90,84 +91,81 @@ export class CharactersService {
   async getMany(queries: SearchFilters) {
     const { limit, offset } = getLimitAndOffset(queries.amount, queries.page);
 
-    const query = knex('characters').select('*');
-    const totalQuery = knex('characters').count();
+    const query = knex('characters').select('*').where('approved', true);
+    const totalQuery = knex('characters').where('approved', true).count();
 
     if (queries.search) {
-      query
-        .whereILike('name', `%${queries.search}%`)
-        .orWhereILike('author', `%${queries.search}%`)
-        .orWhereILike('series', `%${queries.search}%`);
+      query.andWhere((qb) => {
+        qb.whereILike('name', `%${queries.search}%`)
+          .orWhereILike('author', `%${queries.search}%`)
+          .orWhereILike('series', `%${queries.search}%`);
 
-      if (isGenre(queries.search)) {
-        query.orWhereRaw('? =ANY(genres)', queries.search);
-      }
-      if (isRelationship(queries.search)) {
-        query.orWhereRaw('? =ANY(relationships)', queries.search);
-      }
+        if (isGenre(queries.search)) {
+          qb.orWhereRaw('? =ANY(genres)', queries.search);
+        }
+        if (isRelationship(queries.search)) {
+          qb.orWhereRaw('? =ANY(relationships)', queries.search);
+        }
 
-      if (isTypeOfRep(queries.search)) {
-        query.orWhere('typeOfRep', '=', queries.search);
-      }
-      if (isImportance(queries.search)) {
-        query.orWhere('importance', '=', queries.search);
-      }
+        if (isTypeOfRep(queries.search)) {
+          qb.orWhere('typeOfRep', '=', queries.search);
+        }
+        if (isImportance(queries.search)) {
+          qb.orWhere('importance', '=', queries.search);
+        }
 
-      if (isPairing(queries.search)) {
-        query.orWhere('pairing', '=', queries.search);
-      }
+        if (isPairing(queries.search)) {
+          qb.orWhere('pairing', '=', queries.search);
+        }
 
-      if (isSexualOrientation(queries.search)) {
-        query.orWhere('sexualOrientation', '=', queries.search);
-      }
+        if (isSexualOrientation(queries.search)) {
+          qb.orWhere('sexualOrientation', '=', queries.search);
+        }
 
-      if (isRomanticOrientation(queries.search)) {
-        query.orWhere('romanticOrientation', '=', queries.search);
-      }
+        if (isRomanticOrientation(queries.search)) {
+          qb.orWhere('romanticOrientation', '=', queries.search);
+        }
 
-      if (isGender(queries.search)) {
-        query.orWhere('gender', '=', queries.search);
-      }
+        if (isGender(queries.search)) {
+          qb.orWhere('gender', '=', queries.search);
+        }
+      });
 
-      totalQuery
-        .whereILike('name', `%${queries.search}%`)
-        .orWhereILike('author', `%${queries.search}%`)
-        .orWhereILike('series', `%${queries.search}%`);
+      totalQuery.andWhere((qb) => {
+        qb.whereILike('name', `%${queries.search}%`)
+          .orWhereILike('author', `%${queries.search}%`)
+          .orWhereILike('series', `%${queries.search}%`);
 
-      if (isGenre(queries.search)) {
-        totalQuery.orWhereRaw('? =ANY(genres)', queries.search);
-      }
-      if (isRelationship(queries.search)) {
-        totalQuery.orWhereRaw('? =ANY(relationships)', queries.search);
-      }
-      if (isAgeGroup(queries.search)) {
-        totalQuery.orWhere('ageGroup', '=', queries.search);
-      }
-      if (isLength(queries.search)) {
-        totalQuery.orWhere('length', '=', queries.search);
-      }
-      if (isTypeOfRep(queries.search)) {
-        totalQuery.orWhere('typeOfRep', '=', queries.search);
-      }
-      if (isImportance(queries.search)) {
-        totalQuery.orWhere('importance', '=', queries.search);
-      }
+        if (isGenre(queries.search)) {
+          qb.orWhereRaw('? =ANY(genres)', queries.search);
+        }
+        if (isRelationship(queries.search)) {
+          qb.orWhereRaw('? =ANY(relationships)', queries.search);
+        }
 
-      if (isPairing(queries.search)) {
-        totalQuery.orWhere('pairing', '=', queries.search);
-      }
+        if (isTypeOfRep(queries.search)) {
+          qb.orWhere('typeOfRep', '=', queries.search);
+        }
+        if (isImportance(queries.search)) {
+          qb.orWhere('importance', '=', queries.search);
+        }
 
-      if (isSexualOrientation(queries.search)) {
-        totalQuery.orWhere('sexualOrientation', '=', queries.search);
-      }
+        if (isPairing(queries.search)) {
+          qb.orWhere('pairing', '=', queries.search);
+        }
 
-      if (isRomanticOrientation(queries.search)) {
-        totalQuery.orWhere('romanticOrientation', '=', queries.search);
-      }
+        if (isSexualOrientation(queries.search)) {
+          qb.orWhere('sexualOrientation', '=', queries.search);
+        }
 
-      if (isGender(queries.search)) {
-        totalQuery.orWhere('gender', '=', queries.search);
-      }
+        if (isRomanticOrientation(queries.search)) {
+          qb.orWhere('romanticOrientation', '=', queries.search);
+        }
+
+        if (isGender(queries.search)) {
+          qb.orWhere('gender', '=', queries.search);
+        }
+      });
     }
 
     query.limit(limit).offset(offset);
@@ -182,15 +180,22 @@ export class CharactersService {
     return this.charactersRepository
       .createQueryBuilder('characters')
       .select()
+      .where('characters.approved = :status', { status: true })
       .orderBy('RANDOM()')
       .getOne();
   }
 
-  getOne(id: string) {
-    return this.charactersRepository.findOne({
+  async getOne(id: string) {
+    const character = await this.charactersRepository.findOne({
       where: { id },
       relations: ['stories'],
     });
+
+    if (!character) {
+      throw new NotFoundException('Character not found');
+    }
+
+    return character;
   }
 
   getFavorites(favorites: string[]) {
@@ -278,6 +283,7 @@ export class CharactersService {
     }
 
     character.addStory(stories);
+
     await this.charactersRepository.save(character);
 
     return {
@@ -294,5 +300,23 @@ export class CharactersService {
     });
 
     return characters;
+  }
+
+  async approve(id: string) {
+    const character = await this.charactersRepository.findOne({
+      where: { id },
+    });
+
+    if (!character) {
+      throw new NotFoundException('Story not found');
+    }
+
+    character.approve();
+
+    await this.charactersRepository.save(character);
+
+    return {
+      character,
+    };
   }
 }
