@@ -1,5 +1,5 @@
 import { Character } from 'src/characters/character.entity';
-import { AgeGroup, Genres, Length, TypeOfRep } from 'src/utils/types';
+import { AgeGroup, Genres, Length } from 'src/utils/types';
 import {
   Entity,
   Column,
@@ -11,8 +11,6 @@ import {
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { EditStoryDTO } from './dtos/edit-story.dto';
-//   import { Character } from './character.entity';
-//   import { EditCharacterDTO } from './dtos/edit-book.dto';
 
 @Entity({ name: 'stories' })
 export class Story {
@@ -99,14 +97,6 @@ export class Story {
     this.notesAndWarnings = notesAndWarnings ?? null;
     this.repNotesAndWarnings = repNotesAndWarnings ?? null;
     this.createdAt = createdAt ?? new Date();
-  }
-
-  getDifferenceOfCharacters(characters: Character[]) {
-    return this.characters.filter((object1) => {
-      return characters.some((object2) => {
-        return object1.id === object2.id;
-      });
-    });
   }
 
   addCharacters(characters: Character[]) {

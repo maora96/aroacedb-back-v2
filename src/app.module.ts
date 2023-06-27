@@ -5,15 +5,18 @@ import { Character } from './characters/character.entity';
 import { ConfigModule } from '@nestjs/config';
 import { Story } from './stories/story.entity';
 import { StoriesModule } from './stories/stories.module';
+import { AdminModule } from './admin/admin.module';
+import { Permission } from './admin/permissions.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     CharactersModule,
     StoriesModule,
+    AdminModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      entities: [Character, Story],
+      entities: [Character, Story, Permission],
       synchronize: true,
 
       username: process.env.PGUSER,
