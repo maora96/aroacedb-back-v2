@@ -77,7 +77,7 @@ export class StoriesService {
       }
 
       totalQuery
-        .whereILike('name', `%${queries.search}%`)
+        .whereILike('title', `%${queries.search}%`)
         .orWhereILike('author', `%${queries.search}%`)
         .orWhereILike('series', `%${queries.search}%`);
 
@@ -207,5 +207,16 @@ export class StoriesService {
     return {
       story,
     };
+  }
+
+  async getRecentlyAdded() {
+    const stories = await this.storiesRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 10,
+    });
+
+    return stories;
   }
 }

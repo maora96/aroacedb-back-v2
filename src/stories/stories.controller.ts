@@ -31,6 +31,12 @@ export class StoriesController {
     return this.storiesService.getMany(queries);
   }
 
+  @Get('recently-added')
+  async getRecentlyAdded() {
+    const content = await this.storiesService.getRecentlyAdded();
+    return { result: content };
+  }
+
   @Get('random')
   async getRandom() {
     const content = await this.storiesService.getRandom();

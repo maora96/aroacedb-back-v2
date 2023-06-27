@@ -37,6 +37,12 @@ export class CharactersController {
     return { result: content };
   }
 
+  @Get('recently-added')
+  async getRecentlyAdded() {
+    const content = await this.charactersService.getRecentlyAdded();
+    return { result: content };
+  }
+
   @Get(':id')
   async getOne(@Param('id') id: string) {
     const content = await this.charactersService.getOne(id);

@@ -284,4 +284,15 @@ export class CharactersService {
       character,
     };
   }
+
+  async getRecentlyAdded() {
+    const characters = await this.charactersRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 10,
+    });
+
+    return characters;
+  }
 }
