@@ -7,6 +7,7 @@ import { Story } from './stories/story.entity';
 import { StoriesModule } from './stories/stories.module';
 import { AdminModule } from './admin/admin.module';
 import { Permission } from './admin/permissions.entity';
+import { User } from './admin/user.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { Permission } from './admin/permissions.entity';
     AdminModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      entities: [Character, Story, Permission],
+      entities: [Character, Story, Permission, User],
       synchronize: true,
 
       username: process.env.PGUSER,

@@ -16,11 +16,4 @@ import { Story } from 'src/stories/story.entity';
   providers: [CharactersService],
   imports: [TypeOrmModule.forFeature([Character, Story])],
 })
-export class CharactersModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticationMiddleware).forRoutes({
-      path: '/characters/statuss/:id',
-      method: RequestMethod.PATCH,
-    });
-  }
-}
+export class CharactersModule {}

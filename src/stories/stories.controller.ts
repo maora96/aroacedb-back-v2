@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { CreateStoryDTO } from './dtos/create-story.dto';
 import { EditStoryDTO } from './dtos/edit-story.dto';
 import { GetFavoritesDTO } from './dtos/get-favorites.dto';
 import { EditCharactersDTO } from './dtos/edit-characters.dto';
+import { AuthGuard } from 'src/admin/admin.guard';
 
 @Controller('stories')
 export class StoriesController {
@@ -61,6 +63,7 @@ export class StoriesController {
     return { result: content };
   }
 
+  @UseGuards(AuthGuard)
   @Patch('status/:id')
   async approve(@Param('id') id: string) {
     const content = await this.storiesService.approve(id);
@@ -68,6 +71,7 @@ export class StoriesController {
     return { result: content };
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   async edit(@Param('id') id: string, @Body() body: EditStoryDTO) {
     const content = await this.storiesService.edit(id, body);
@@ -86,6 +90,7 @@ export class StoriesController {
     return { result: content };
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     const content = await this.storiesService.delete(id);

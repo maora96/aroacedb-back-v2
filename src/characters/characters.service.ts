@@ -308,7 +308,7 @@ export class CharactersService {
     });
 
     if (!character) {
-      throw new NotFoundException('Story not found');
+      throw new NotFoundException('Character not found');
     }
 
     character.approve();
