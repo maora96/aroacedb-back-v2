@@ -38,18 +38,6 @@ export class EditCharacterDTO {
   @IsOptional()
   cover: string | null;
 
-  // @IsEnum(AgeGroup, {
-  //   message: 'AgeGroup invalid.',
-  // })
-  // @IsOptional()
-  // ageGroup: AgeGroup;
-
-  // @IsEnum(Length, {
-  //   message: 'Length invalid.',
-  // })
-  // @IsOptional()
-  // length: Length;
-
   @IsEnum(TypeOfRep, {
     message: 'TypeOfRep invalid.',
   })
