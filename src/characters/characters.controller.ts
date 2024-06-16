@@ -13,7 +13,11 @@ import {
 } from '@nestjs/common';
 import { CreateCharacterDTO } from './dtos/create-character.dto';
 import { CharactersService } from './characters.service';
-import { CharacterFilters, SearchFilters } from 'src/utils/filters';
+import {
+  CharacterFilters,
+  CharacterParams,
+  SearchFilters,
+} from 'src/utils/filters';
 import { GetFavoritesDTO } from './dtos/get-favorites.dto';
 import { EditCharacterDTO } from './dtos/edit-character.dto';
 import { EditStoriesDTO } from './dtos/edit-stories.dto';
@@ -31,6 +35,16 @@ export class CharactersController {
   @Get()
   getMany(@Query() queries: SearchFilters) {
     return this.charactersService.getMany(queries);
+  }
+
+  @Get('all-characters')
+  getAllCharacters(@Query() param: CharacterParams) {
+    return this.charactersService.getAllCharacters(param);
+  }
+
+  @Get('canon')
+  getCanonCharacters(@Query() param: CharacterParams) {
+    return this.charactersService.getCanonCharacters(param);
   }
 
   @Get('random')

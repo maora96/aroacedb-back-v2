@@ -36,3 +36,7 @@ export interface StoriesFilters extends PaginationParams {
 export interface SearchFilters extends PaginationParams {
   search?: string;
 }
+
+export interface CharacterParams extends PaginationParams {
+  param: 'AROMANTIC' | 'ASEXUAL';
+}

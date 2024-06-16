@@ -4,7 +4,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Character } from './character.entity';
 import { In, Repository } from 'typeorm';
 import { CreateCharacterDTO } from './dtos/create-character.dto';
-import { CharacterFilters, SearchFilters } from 'src/utils/filters';
+import {
+  CharacterFilters,
+  CharacterParams,
+  SearchFilters,
+} from 'src/utils/filters';
 import { getLimitAndOffset } from 'src/utils/pagination.';
 import { EditCharacterDTO } from './dtos/edit-character.dto';
 import {
@@ -21,6 +25,11 @@ import {
 } from 'src/utils/enumValidation';
 import { knex } from 'src/utils/knex';
 import { Story } from 'src/stories/story.entity';
+import {
+  RomanticOrientation,
+  SexualOrientation,
+  TypeOfRep,
+} from 'src/utils/types';
 
 @Injectable()
 export class CharactersService {
@@ -174,6 +183,75 @@ export class CharactersService {
     const [total] = await totalQuery;
 
     return { result, total: total?.count ? Number(total?.count) : 0 };
+  }
+
+  async getAllCharacters(params: CharacterParams) {
+    const { limit, offset } = getLimitAndOffset(params.amount, params.page);
+
+    const characters = await this.charactersRepository.findAndCount({
+      where:
+        params.param === 'AROMANTIC'
+          ? {
+              approved: true,
+              romanticOrientation: In([
+                RomanticOrientation.Aroflux,
+                RomanticOrientation.Aromantic,
+                RomanticOrientation.Grayromantic,
+                RomanticOrientation.Demiromantic,
+                RomanticOrientation.Arospec,
+                RomanticOrientation.Wtfromantic,
+              ]),
+            }
+          : {
+              approved: true,
+              sexualOrientation: In([
+                SexualOrientation.Asexual,
+                SexualOrientation.Grayasexual,
+                SexualOrientation.Demisexual,
+                SexualOrientation.Acespec,
+              ]),
+            },
+
+      skip: offset,
+      take: limit,
+    });
+
+    return { result: characters[0], total: characters[1] };
+  }
+
+  async getCanonCharacters(params: CharacterParams) {
+    const { limit, offset } = getLimitAndOffset(params.amount, params.page);
+
+    const characters = await this.charactersRepository.findAndCount({
+      where:
+        params.param === 'AROMANTIC'
+          ? {
+              approved: true,
+              romanticOrientation: In([
+                RomanticOrientation.Aroflux,
+                RomanticOrientation.Aromantic,
+                RomanticOrientation.Grayromantic,
+                RomanticOrientation.Demiromantic,
+                RomanticOrientation.Arospec,
+                RomanticOrientation.Wtfromantic,
+              ]),
+              typeOfRep: In([TypeOfRep.On_Page, TypeOfRep.Word_Used]),
+            }
+          : {
+              approved: true,
+              sexualOrientation: In([
+                SexualOrientation.Asexual,
+                SexualOrientation.Grayasexual,
+                SexualOrientation.Demisexual,
+                SexualOrientation.Acespec,
+              ]),
+              typeOfRep: In([TypeOfRep.On_Page, TypeOfRep.Word_Used]),
+            },
+      skip: offset,
+      take: limit,
+    });
+
+    return { result: characters[0], total: characters[1] };
   }
 
   getRandom() {
