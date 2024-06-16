@@ -39,11 +39,21 @@ export class CharactersController {
 
   @Get('all-characters')
   getAllCharacters(@Query() param: CharacterParams) {
+    if (param.param === 'undefined')
+      return {
+        result: [],
+        total: 0,
+      };
     return this.charactersService.getAllCharacters(param);
   }
 
   @Get('canon')
   getCanonCharacters(@Query() param: CharacterParams) {
+    if (param.param === 'undefined')
+      return {
+        result: [],
+        total: 0,
+      };
     return this.charactersService.getCanonCharacters(param);
   }
 

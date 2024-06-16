@@ -38,5 +38,5 @@ export interface SearchFilters extends PaginationParams {
 }
 
 export interface CharacterParams extends PaginationParams {
-  param: 'AROMANTIC' | 'ASEXUAL';
+  param: string | undefined;
 }
