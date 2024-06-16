@@ -202,7 +202,8 @@ export class CharactersService {
                 RomanticOrientation.Wtfromantic,
               ]),
             }
-          : {
+          : params.param === 'ASEXUAL'
+          ? {
               approved: true,
               sexualOrientation: In([
                 SexualOrientation.Asexual,
@@ -210,7 +211,8 @@ export class CharactersService {
                 SexualOrientation.Demisexual,
                 SexualOrientation.Acespec,
               ]),
-            },
+            }
+          : null,
 
       skip: offset,
       take: limit,
@@ -237,7 +239,8 @@ export class CharactersService {
               ]),
               typeOfRep: In([TypeOfRep.On_Page, TypeOfRep.Word_Used]),
             }
-          : {
+          : params.param === 'ASEXUAL'
+          ? {
               approved: true,
               sexualOrientation: In([
                 SexualOrientation.Asexual,
@@ -246,7 +249,8 @@ export class CharactersService {
                 SexualOrientation.Acespec,
               ]),
               typeOfRep: In([TypeOfRep.On_Page, TypeOfRep.Word_Used]),
-            },
+            }
+          : null,
       skip: offset,
       take: limit,
     });
