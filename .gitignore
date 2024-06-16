@@ -36,5 +36,3 @@ lerna-debug.log*
 
 .env
 ca-certificate.crt
-
-src/utils/constants.ts
