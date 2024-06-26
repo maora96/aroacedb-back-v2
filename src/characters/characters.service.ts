@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-// import { CharactersRepository } from '../repositories/characters.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Character } from './character.entity';
-import { In, Repository } from 'typeorm';
+import { ILike, In, Repository } from 'typeorm';
 import { CreateCharacterDTO } from './dtos/create-character.dto';
 import {
   CharacterFilters,
@@ -12,11 +11,9 @@ import {
 import { getLimitAndOffset } from 'src/utils/pagination.';
 import { EditCharacterDTO } from './dtos/edit-character.dto';
 import {
-  isAgeGroup,
   isGender,
   isGenre,
   isImportance,
-  isLength,
   isPairing,
   isRelationship,
   isRomanticOrientation,
@@ -182,7 +179,33 @@ export class CharactersService {
     const result = await query;
     const [total] = await totalQuery;
 
-    return { result, total: total?.count ? Number(total?.count) : 0 };
+    const stories = await this.storiesRepository.find({
+      where: {
+        title: ILike(`%${queries.search}%`),
+      },
+      relations: {
+        characters: true,
+      },
+
+      skip: offset,
+      take: limit,
+    });
+
+    const storyCharacters = [];
+
+    stories.forEach((story) => {
+      story.characters.forEach((character) => {
+        storyCharacters.push(character);
+      });
+    });
+
+    const actualResult = [...result, storyCharacters];
+    const unique = [...new Set(actualResult)];
+
+    return {
+      result: unique,
+      total: total?.count ? Number(total?.count) + storyCharacters.length : 0,
+    };
   }
 
   async getAllCharacters(params: CharacterParams) {
