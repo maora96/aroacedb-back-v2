@@ -203,7 +203,7 @@ export class CharactersService {
     const unique = [...new Set(actualResult)];
 
     return {
-      result: unique,
+      result: unique[0],
       total: total?.count ? Number(total?.count) + storyCharacters.length : 0,
     };
   }
