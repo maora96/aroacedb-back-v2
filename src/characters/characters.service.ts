@@ -199,11 +199,11 @@ export class CharactersService {
       });
     });
 
-    const actualResult = [...result, storyCharacters];
+    const actualResult = [...result, ...storyCharacters];
     const unique = [...new Set(actualResult)];
 
     return {
-      result: unique[0],
+      result: unique,
       total: total?.count ? Number(total?.count) + storyCharacters.length : 0,
     };
   }
