@@ -424,4 +424,14 @@ export class CharactersService {
       character,
     };
   }
+
+  async getAllAdminCharacters(status: boolean) {
+    const characters = await this.charactersRepository.findAndCount({
+      where: {
+        approved: status,
+      },
+    });
+
+    return { result: characters[0], total: characters[1] };
+  }
 }

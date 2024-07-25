@@ -97,4 +97,12 @@ export class StoriesController {
 
     return { result: content };
   }
+
+  @UseGuards(AuthGuard)
+  @Get('/admin/:status')
+  async getAllAdminCharacters(@Param('status') status: boolean) {
+    const content = await this.storiesService.getAllAdminStories(status);
+
+    return content;
+  }
 }

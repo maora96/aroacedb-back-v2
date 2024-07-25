@@ -45,7 +45,6 @@ export class AdminController {
     return { result: content };
   }
 
-  @UseGuards(AuthGuard)
   @Get('permissions')
   async getPermissions() {
     const content = await this.adminService.getPermissions();

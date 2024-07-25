@@ -239,4 +239,14 @@ export class StoriesService {
       story,
     };
   }
+
+  async getAllAdminStories(status: boolean) {
+    const stories = await this.storiesRepository.findAndCount({
+      where: {
+        approved: status,
+      },
+    });
+
+    return { result: stories[0], total: stories[1] };
+  }
 }

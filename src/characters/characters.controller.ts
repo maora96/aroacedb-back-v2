@@ -122,4 +122,12 @@ export class CharactersController {
 
     return { result: content };
   }
+
+  @UseGuards(AuthGuard)
+  @Get('/admin/:status')
+  async getAllAdminCharacters(@Param('status') status: boolean) {
+    const content = await this.charactersService.getAllAdminCharacters(status);
+
+    return content;
+  }
 }
