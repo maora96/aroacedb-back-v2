@@ -125,8 +125,14 @@ export class CharactersController {
 
   @UseGuards(AuthGuard)
   @Get('/admin/:status')
-  async getAllAdminCharacters(@Param('status') status: boolean) {
-    const content = await this.charactersService.getAllAdminCharacters(status);
+  async getAllAdminCharacters(
+    @Param('status') status: boolean,
+    @Query() queries: { search: string },
+  ) {
+    const content = await this.charactersService.getAllAdminCharacters(
+      status,
+      queries.search,
+    );
 
     return content;
   }

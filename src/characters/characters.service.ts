@@ -425,13 +425,27 @@ export class CharactersService {
     };
   }
 
-  async getAllAdminCharacters(status: boolean) {
-    const characters = await this.charactersRepository.findAndCount({
-      where: {
-        approved: status,
-      },
-    });
+  async getAllAdminCharacters(status: boolean, search: string) {
+    const query = knex('characters').select('*').where('approved', status);
+    const totalQuery = knex('characters').where('approved', status).count();
 
-    return { result: characters[0], total: characters[1] };
+    if (search) {
+      query.andWhere((qb) => {
+        qb.whereILike('name', `%${search}%`)
+          .orWhereILike('author', `%${search}%`)
+          .orWhereILike('series', `%${search}%`);
+      });
+
+      totalQuery.andWhere((qb) => {
+        qb.whereILike('name', `%${search}%`)
+          .orWhereILike('author', `%${search}%`)
+          .orWhereILike('series', `%${search}%`);
+      });
+    }
+
+    const result = await query;
+    const [total] = await totalQuery;
+
+    return { result, total: total?.count ? Number(total?.count) : 0 };
   }
 }
