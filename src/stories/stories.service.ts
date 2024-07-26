@@ -250,13 +250,35 @@ export class StoriesService {
     };
   }
 
-  async getAllAdminStories(status: boolean) {
-    const stories = await this.storiesRepository.findAndCount({
-      where: {
-        approved: status,
-      },
-    });
+  async getAllAdminStories(status: boolean, search: string) {
+    const query = knex('stories').select('*').where('approved', status);
+    const totalQuery = knex('stories').where('approved', status).count();
 
-    return { result: stories[0], total: stories[1] };
+    if (search) {
+      query.andWhere((qb) => {
+        qb.whereILike('title', `%${search}%`)
+          .orWhereILike('author', `%${search}%`)
+          .orWhereILike('series', `%${search}%`);
+
+        if (isGenre(search)) {
+          qb.orWhereRaw('? =ANY(genres)', search);
+        }
+      });
+
+      totalQuery.andWhere((qb) => {
+        qb.whereILike('title', `%${search}%`)
+          .orWhereILike('author', `%${search}%`)
+          .orWhereILike('series', `%${search}%`);
+
+        if (isGenre(search)) {
+          qb.orWhereRaw('? =ANY(genres)', search);
+        }
+      });
+    }
+
+    const result = await query;
+    const [total] = await totalQuery;
+
+    return { result, total: total?.count ? Number(total?.count) : 0 };
   }
 }
