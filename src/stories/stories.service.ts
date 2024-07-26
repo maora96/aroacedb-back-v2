@@ -115,13 +115,23 @@ export class StoriesService {
   async getOne(id: string) {
     const story = await this.storiesRepository.findOne({
       where: { id },
-      relations: ['characters'],
     });
 
     if (!story) {
       throw new NotFoundException('Story not found');
     }
-    return story;
+
+    const characters = await this.charactersRepository.find({
+      where: {
+        stories: {
+          id: id,
+        },
+      },
+    });
+
+    const completeStory = { ...story, characters };
+
+    return completeStory;
   }
 
   getFavorites(favorites: string[]) {
