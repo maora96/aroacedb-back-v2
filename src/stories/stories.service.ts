@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { ArrayContains, In, Repository } from 'typeorm';
 import { SearchFilters, StoriesFilters } from 'src/utils/filters';
 import { getLimitAndOffset } from 'src/utils/pagination.';
 import {
@@ -27,30 +27,24 @@ export class StoriesService {
   async getManyAdvanced(filters: StoriesFilters) {
     const { limit, offset } = getLimitAndOffset(filters.amount, filters.page);
 
-    const query = knex('stories').select('*').where('approved', true);
-    const totalQuery = knex('stories').where('approved', true).count();
+    const stories = await this.storiesRepository.findAndCount({
+      where: {
+        approved: true,
+        ...(filters?.genres && {
+          genres: ArrayContains(filters?.genres),
+        }),
+        ...(filters?.ageGroup && {
+          ageGroup: In(filters?.ageGroup),
+        }),
+        ...(filters?.length && {
+          length: In(filters?.length),
+        }),
+      },
+      skip: offset,
+      take: limit,
+    });
 
-    if (filters.ageGroup) {
-      query.andWhere('ageGroup', '=', filters.ageGroup);
-      totalQuery.andWhere('ageGroup', '=', filters.ageGroup);
-    }
-
-    if (filters.length) {
-      query.andWhere('length', '=', filters.length);
-      totalQuery.andWhere('length', '=', filters.length);
-    }
-
-    if (filters.genres) {
-      query.andWhereRaw('? =ANY(genres)', filters.genres);
-      totalQuery.andWhereRaw('? =ANY(genres)', filters.genres);
-    }
-
-    query.limit(limit).offset(offset);
-
-    const result = await query;
-    const [total] = await totalQuery;
-
-    return { result, total: total?.count ? Number(total?.count) : 0 };
+    return { result: stories[0], total: stories[1] };
   }
 
   async getMany(queries: SearchFilters) {
@@ -136,6 +130,16 @@ export class StoriesService {
 
   getFavorites(favorites: string[]) {
     return this.storiesRepository.find({ where: { id: In(favorites) } });
+  }
+
+  async createMany(createStoryDTO: CreateStoryDTO[]) {
+    const createdStories = [];
+    for (const story of createStoryDTO) {
+      const newStory = await this.create(story);
+      createdStories.push(createdStories);
+    }
+
+    return createdStories;
   }
 
   create(createStoryDTO: CreateStoryDTO) {

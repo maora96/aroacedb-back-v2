@@ -63,6 +63,14 @@ export class StoriesController {
     return { result: content };
   }
 
+  @Post('many')
+  @UsePipes(new ValidationPipe())
+  async createMany(@Body() body: { stories: CreateStoryDTO[] }) {
+    const content = await this.storiesService.createMany(body.stories);
+
+    return { result: content };
+  }
+
   @UseGuards(AuthGuard)
   @Patch('status/:id')
   async approve(@Param('id') id: string) {

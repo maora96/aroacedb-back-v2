@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Character } from './character.entity';
-import { ILike, In, Repository } from 'typeorm';
+import { ArrayContains, ILike, In, Repository } from 'typeorm';
 import { CreateCharacterDTO } from './dtos/create-character.dto';
 import {
   CharacterFilters,
@@ -40,58 +40,39 @@ export class CharactersService {
   async getManyAdvanced(filters: CharacterFilters) {
     const { limit, offset } = getLimitAndOffset(filters.amount, filters.page);
 
-    const query = knex('characters').select('*').where('approved', true);
-    const totalQuery = knex('characters').where('approved', true).count();
+    const characters = await this.charactersRepository.findAndCount({
+      where: {
+        approved: true,
+        ...(filters?.relationships && {
+          relationships: ArrayContains(filters?.relationships),
+        }),
+        ...(filters?.genres && {
+          genres: ArrayContains(filters?.genres),
+        }),
+        ...(filters?.typeOfRep && {
+          typeOfRep: In(filters?.typeOfRep),
+        }),
+        ...(filters?.importance && {
+          importance: In(filters?.importance),
+        }),
+        ...(filters?.pairing && {
+          pairing: In(filters?.pairing),
+        }),
+        ...(filters?.sexualOrientation && {
+          sexualOrientation: In(filters?.sexualOrientation),
+        }),
+        ...(filters?.romanticOrientation && {
+          romanticOrientation: In(filters?.romanticOrientation),
+        }),
+        ...(filters?.gender && {
+          gender: In(filters?.gender),
+        }),
+      },
+      skip: offset,
+      take: limit,
+    });
 
-    if (filters.typeOfRep) {
-      query.andWhere('typeOfRep', '=', filters.typeOfRep);
-      totalQuery.andWhere('typeOfRep', '=', filters.typeOfRep);
-    }
-
-    if (filters.importance) {
-      query.andWhere('importance', '=', filters.importance);
-      totalQuery.andWhere('importance', '=', filters.importance);
-    }
-
-    if (filters.pairing) {
-      query.andWhere('pairing', '=', filters.pairing);
-      totalQuery.andWhere('pairing', '=', filters.pairing);
-    }
-    if (filters.relationships) {
-      query.andWhereRaw('? =ANY(relationships)', filters.relationships);
-      totalQuery.andWhereRaw('? =ANY(relationships)', filters.relationships);
-    }
-
-    if (filters.genres) {
-      query.andWhereRaw('? =ANY(genres)', filters.genres);
-      totalQuery.andWhereRaw('? =ANY(genres)', filters.genres);
-    }
-
-    if (filters.sexualOrientation) {
-      query.andWhere('sexualOrientation', '=', filters.sexualOrientation);
-      totalQuery.andWhere('sexualOrientation', '=', filters.sexualOrientation);
-    }
-
-    if (filters.romanticOrientation) {
-      query.andWhere('romanticOrientation', '=', filters.romanticOrientation);
-      totalQuery.andWhere(
-        'romanticOrientation',
-        '=',
-        filters.romanticOrientation,
-      );
-    }
-
-    if (filters.gender) {
-      query.andWhere('gender', '=', filters.gender);
-      totalQuery.andWhere('gender', '=', filters.gender);
-    }
-
-    query.limit(limit).offset(offset);
-
-    const result = await query;
-    const [total] = await totalQuery;
-
-    return { result, total: total?.count ? Number(total?.count) : 0 };
+    return { result: characters[0], total: characters[1] };
   }
 
   async getMany(queries: SearchFilters) {
