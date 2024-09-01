@@ -115,6 +115,19 @@ export class CharactersController {
     return content;
   }
 
+  @Delete(':id/stories/:storyId')
+  async removeStoryFromCharacter(
+    @Param('id') id: string,
+    @Param(':storyId') storyId: string,
+  ) {
+    const content = await this.charactersService.removeStoryFromCharacter(
+      id,
+      storyId,
+    );
+
+    return content;
+  }
+
   @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {

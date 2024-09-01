@@ -377,6 +377,33 @@ export class CharactersService {
     };
   }
 
+  async removeStoryFromCharacter(id: string, storyId: string) {
+    const character = await this.charactersRepository.findOne({
+      where: { id },
+      relations: ['stories'],
+    });
+
+    if (!character) {
+      throw new NotFoundException('Character not found');
+    }
+
+    const story = await this.storiesRepository.findOne({
+      where: { id: storyId },
+    });
+
+    if (!story) {
+      throw new NotFoundException('No story found.');
+    }
+
+    character.removeStory(story);
+
+    await this.charactersRepository.save(character);
+
+    return {
+      character,
+    };
+  }
+
   async getRecentlyAdded() {
     const characters = await this.charactersRepository.find({
       order: {

@@ -134,6 +134,7 @@ export class Character {
     this.notesAndWarnings =
       editCharacterDTO.notesAndWarnings ?? this.notesAndWarnings;
   }
+
   addStory(stories: Story[]) {
     if (this.stories.length === 0) {
       this.stories = stories;
@@ -144,6 +145,15 @@ export class Character {
           this.stories.push(story);
         }
       }
+    }
+  }
+
+  removeStory(story: Story) {
+    if (this.stories.length !== 0) {
+      const newStories = this.stories.filter(
+        (str: Story) => str.id !== story.id,
+      );
+      this.stories = newStories;
     }
   }
 
